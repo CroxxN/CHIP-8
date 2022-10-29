@@ -1,3 +1,5 @@
+
+
 pub struct CPU{
     current_op: u16,
     registers: [u8; 2]
@@ -16,6 +18,7 @@ impl CPU{
     }
     
     pub fn add(&mut self, x: u8, y: u8) {
+        self.registers[x as usize] = 0;
         self.registers[x as usize] += self.registers[y as usize];
     }
     
