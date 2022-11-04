@@ -23,22 +23,48 @@
 ```rust
 
     // Bring the CPU struct in scope
-    use add::CPU;
+    use executor::CPU;
 
     //The entry point to our emulator
     fn main(){
-        let op = 0x8104;
-    
-    // Note: the values of both the registers must be in the bounds of u8 as originally implemented in CHIP-8
-    
-        let register1 = 10; // Initial value of the first register
-        let register2 = 15; // Initial value of the second register
-    
-        // Initialize a cpu with the above Instructions and values
-        let cpu = CPU::new(op, register1, register2);
-    
-        // Evaluate the instructions and add register2 to register1
-    
+        let mut cpu = CPU{
+            registers: [0;16],
+            pos_in_memory: 0,
+            memory: [0; 4096],
+            stack: [0; 16],
+            stack_pointer: 0
+        }
+        // Note: the values of both the registers must be in the bounds of u8 as originally implemented in CHIP-8
+        // Put values in registers 0 and 1 (used for addition in this example)
+        cpu.registers[0] = 5;
+        cpu.registers[1] = 20;
+        // test for multiplication
+        cpu.registers[2] = 2;
+        cpu.registers[3] = 10;
+        
+        //for convenience: create a mutable reference to our memory
+        let mem = &mut cpu.memory;
+
+        // Set some op codes to test our program
+        // Each 2 byte is 1 op code
+        
+        // For example mem[0x000] and mem[0x001] are one opcode
+        mem[0x000] = 0x21;
+        mem[0x001] = 0x00;
+        mem[002] = 0x21;
+        mem[0x003] = 0x00;
+        mem[0x004] = 0xf2;
+        mem[0x005] = 0x3f;
+        // mem[0x004] = 0x00; // Uninitialized memory address are already zero
+        // mem[0x005] = 0x00; // No need to do this
+
+        mem[0x100] = 0x80;
+        mem[0x101] = 0x14;
+        mem[0x102] = 0x80;
+        mem[0x103] = 0x14;
+        mem[0x104] = 0x00;
+        mem[0x105] = 0xEE;
+
         cpu.run();
     }
     
@@ -47,9 +73,21 @@
 # Why?
 
 
-- I'm bored lmao
+- ~I'm bored lmao~ It's intresting
+
 
 # Features
 
+- Addition
+- Multiply (custom op code -> 0xFxyF where: x: Register x, y: Register: y)
+- Function call and return
 
-- It only supports addition for now but work on multiplication is going on.
+# Op Codes:
+    - `0x8xy4` -> Add value of `register y` to `register x` and store in register x
+    - `0x2nnn` -> Go to memory address `nnn`
+    - `0x00EE` -> Return to function call memory address
+    - `0xfxyf` -> Multiply value of `register y` to `register x` and store the result in `register x`
+    - `0x6xnn` -> Put value nn in `register x`
+    
+    Work on supporting other operation is going on.
+ 
