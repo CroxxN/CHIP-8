@@ -18,7 +18,7 @@
   two registers we are working with, 1 represents `register 1`, 0 represents `register 0` and 4 represent `addition`. This is, however,
   huge simplification (take the above description with a grain of salt).
 
-# Usuage
+# Usage
 
 ```rust
 
