@@ -73,7 +73,7 @@
 # Why?
 
 
-- ~I'm bored lmao~ It's intresting
+- ~I'm bored lmao~ It's interesting
 
 
 # Features
